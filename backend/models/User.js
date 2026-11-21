@@ -30,7 +30,7 @@ userSchema.methods.matchPassword = function (plain) {
 }
 
 userSchema.methods.toJSON = function () {
-    const obj = this.toOject();
+    const obj = this.toObject();
     delete obj.password;
     return obj;
 }
