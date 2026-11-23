@@ -6,7 +6,8 @@ import { connectDB } from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 import authRouter from "./routes/auth.js";
 import habitRouter from "./routes/habits.js";
-import logRouter from "./routes/logs.js"
+import logRouter from "./routes/logs.js";
+import aiRouter from "./routes/ai.js";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.get("/api/health", (_req, res)=>{
 app.use("/api/auth", authRouter);
 app.use("/api/habits", habitRouter);
 app.use("/api/logs", logRouter);
+app.use("/api/ai", aiRouter);
 
 app.use(notFound);
 app.use(errorHandler);
