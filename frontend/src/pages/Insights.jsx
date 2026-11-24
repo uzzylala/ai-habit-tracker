@@ -30,6 +30,8 @@ import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import Markdown from "../components/Markdown.jsx";
 import { weekKeysFor, streakFromKeys } from "../utils/dateHelpers.js";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+
 
 const PIE_COLORS = [
   "#f59e0b",
@@ -43,7 +45,9 @@ const PIE_COLORS = [
   "#14b8a6",
 ];
 
-const REPORT_CACHE_KEY = (weekStart) => `weekly-report-${weekStart}`;
+// const REPORT_CACHE_KEY = (weekStart) => `weekly-report-${weekStart}`;
+const REPORT_CACHE_KEY = (userId, weekStart) => `weekly-report-${userId}-${weekStart}`;
+
 
 export default function Insights() {
   const { theme } = useTheme();
@@ -58,6 +62,8 @@ export default function Insights() {
     color: isDark ? "#ebebf5" : "#13131b",
     backdropFilter: "blur(12px)",
   };
+
+  const {user} = useAuth();
 
   const [habits, setHabits] = useState([]);
   const [logs, setLogs] = useState([]);
@@ -87,7 +93,8 @@ export default function Insights() {
         setLogs(logsRes.data);
 
         // try to load cached report for this week
-        const cached = localStorage.getItem(REPORT_CACHE_KEY(thisWeek[0].key));
+        // const cached = localStorage.getItem(REPORT_CACHE_KEY(thisWeek[0].key));
+        const cached = localStorage.getItem(REPORT_CACHE_KEY(user._id, thisWeek[0].key))
         if (cached) {
           try {
             const { content, generatedAt } = JSON.parse(cached);
@@ -113,7 +120,7 @@ export default function Insights() {
       const now = new Date();
       setReportGeneratedAt(now);
       localStorage.setItem(
-        REPORT_CACHE_KEY(thisWeek[0].key),
+        REPORT_CACHE_KEY(user._id, thisWeek[0].key),
         JSON.stringify({ content: res.data.content, generatedAt: now })
       );
     } catch {

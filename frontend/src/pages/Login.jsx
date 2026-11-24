@@ -98,7 +98,7 @@ export default function Login() {
           <div className="text-center mt-5 text-sm text-soft">
             Don't have an account?{" "}
             <Link to="/register" className="text-brand-600 dark:text-brand-300 font-medium">
-              Create one
+              Create account
             </Link>
           </div>
         </div>
