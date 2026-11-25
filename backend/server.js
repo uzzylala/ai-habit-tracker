@@ -71,3 +71,4 @@ if (!process.env.VERCEL) {
     .catch((err) => console.error("MongoDB connection error:", err.message));
 }
 
+export default app;
