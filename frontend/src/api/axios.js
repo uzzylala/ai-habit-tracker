@@ -1,7 +1,7 @@
   import axios from "axios";
 
   const api = axios.create({
-    baseURL: import.meta.env.url || "http://localhost:8000/api",
+    baseURL: "https://ai-habit-tracker-sandy.vercel.app/api",
   });
 
   api.interceptors.request.use((config) => {
