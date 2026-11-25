@@ -37,6 +37,16 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 app.use(express.json({limit: "1mb"}));
 
+app.use(async (_req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("MongoDB connection error:", err.message);
+    res.status(500).json({ message: "Database connection failed" });
+  }
+});
+
 app.get("/api/health", (_req, res)=>{
     res.json({status: "ok", time: new Date().toDateString()})
 });
@@ -51,12 +61,13 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
 
-connectDB().catch((err) => console.error("MongoDB connection error:", err));
-
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
+if (!process.env.VERCEL) {
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+      });
+    })
+    .catch((err) => console.error("MongoDB connection error:", err.message));
 }
 
-export default app;
