@@ -51,11 +51,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
-});
+connectDB().catch((err) => console.error("MongoDB connection error:", err));
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
